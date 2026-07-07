@@ -1,0 +1,36 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(npm audit *)",
+            "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/block-audit-force.sh",
+            "args": []
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(npm install*)",
+            "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/remind-npm-audit.sh",
+            "args": []
+          },
+          {
+            "type": "command",
+            "if": "Bash(npm update*)",
+            "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/remind-npm-audit.sh",
+            "args": []
+          }
+        ]
+      }
+    ]
+  }
+}

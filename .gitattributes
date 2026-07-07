@@ -1,0 +1,4 @@
+# Shell scripts must always check out with LF line endings — CRLF breaks
+# the shebang line ("/bin/bash^M: bad interpreter") when Claude Code's
+# hooks execute these directly.
+*.sh text eol=lf
