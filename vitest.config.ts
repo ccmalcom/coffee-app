@@ -8,5 +8,9 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./vitest.setup.ts'],
+    // No test files exist yet this early in Plan 1 (first tests land with the
+    // parsing/coffee-log tasks); without this, `vitest run` exits 1 on zero
+    // tests and would fail CI for every PR until then.
+    passWithNoTests: true,
   },
 })
