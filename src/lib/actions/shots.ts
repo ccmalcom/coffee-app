@@ -156,7 +156,11 @@ function toSuggestionShots(
   rows: { grindPosition: number | null; timeSeconds: number; outcomeTags: string[] }[],
 ): ShotForSuggestion[] {
   return rows
-    .filter((r) => r.grindPosition !== null)
+    // Interpolation-eligible only when the stored position is a real finite
+    // number. Non-numeric shots store NULL; a malformed write could store NaN
+    // (Postgres `real` accepts it) — either would poison the OLS/median math,
+    // so both are excluded here rather than leaked into the suggestion engine.
+    .filter((r) => r.grindPosition !== null && Number.isFinite(r.grindPosition))
     .map((r) => ({
       grindPosition: r.grindPosition as number,
       timeSeconds: r.timeSeconds,

@@ -49,6 +49,22 @@ export function ShotForm({
   const grinder = grinders.find((g) => g.id === grinderId) ?? null
   const hasMicroDial = grinder?.microStepsPerMacroNotch != null
 
+  // Guard the write path: dose/yield/time must parse to finite numbers, and the
+  // grind entry must be present (a finite macro for micro-dial grinders, or any
+  // non-empty label for single-dial ones — free text is intentionally allowed
+  // there and stored as interpolation-ineligible). Without this, a blank submit
+  // writes NaN into the numeric columns and stalls the suggestion engine.
+  const grindValid = hasMicroDial
+    ? Number.isFinite(toNumber(macro))
+    : grindText.trim().length > 0
+  const canSubmit =
+    !!grinderId &&
+    !!machineId &&
+    Number.isFinite(toNumber(dose)) &&
+    Number.isFinite(toNumber(yieldG)) &&
+    Number.isFinite(toNumber(time)) &&
+    grindValid
+
   // Refresh the dial-in card whenever the combo (coffee is fixed) changes.
   useEffect(() => {
     if (!grinderId || !machineId) return
@@ -177,7 +193,7 @@ export function ShotForm({
       <button
         type="button"
         onClick={submit}
-        disabled={isPending || !grinderId || !machineId}
+        disabled={isPending || !canSubmit}
         className="bg-black text-white rounded p-2 disabled:opacity-50"
       >
         {isPending ? 'Saving…' : 'Save shot'}
