@@ -40,3 +40,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Serwist
+public/sw*
+public/swe-worker*
+
+# editor (personal, not shared team config)
+.vscode/
+
+# Claude Code local runtime state
+.claude/scheduled_tasks.lock

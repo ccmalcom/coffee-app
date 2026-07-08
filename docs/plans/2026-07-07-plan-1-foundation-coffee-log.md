@@ -3187,19 +3187,101 @@ serwist.addEventListeners()
 
 - [ ] **Step 7: Generate placeholder icons**
 
-```bash
-mkdir -p public/icons
-python3 -c "
-from PIL import Image, ImageDraw
-for size in (192, 512):
-    img = Image.new('RGB', (size, size), '#1c1917')
-    draw = ImageDraw.Draw(img)
-    draw.ellipse([size*0.2, size*0.2, size*0.8, size*0.8], fill='#f5f0e8')
-    img.save(f'public/icons/icon-{size}x{size}.png')
-"
+No Python — this repo is TypeScript/Node-only (Global Constraints). Hand-roll a minimal valid PNG using only Node's built-in `zlib`, no new dependency:
+
+```javascript
+// scripts/gen-icons.mjs (temporary — delete after running, or keep for regenerating placeholders)
+import { deflateSync } from 'node:zlib'
+import { writeFileSync, mkdirSync } from 'node:fs'
+
+const CRC_TABLE = (() => {
+  const table = new Uint32Array(256)
+  for (let n = 0; n < 256; n++) {
+    let c = n
+    for (let k = 0; k < 8; k++) {
+      c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1
+    }
+    table[n] = c >>> 0
+  }
+  return table
+})()
+
+function crc32(buf) {
+  let c = 0xffffffff
+  for (let i = 0; i < buf.length; i++) {
+    c = CRC_TABLE[(c ^ buf[i]) & 0xff] ^ (c >>> 8)
+  }
+  return (c ^ 0xffffffff) >>> 0
+}
+
+function chunk(type, data) {
+  const typeBuf = Buffer.from(type, 'ascii')
+  const len = Buffer.alloc(4)
+  len.writeUInt32BE(data.length, 0)
+  const crcBuf = Buffer.alloc(4)
+  crcBuf.writeUInt32BE(crc32(Buffer.concat([typeBuf, data])), 0)
+  return Buffer.concat([len, typeBuf, data, crcBuf])
+}
+
+function hexToRgb(hex) {
+  const n = parseInt(hex.replace('#', ''), 16)
+  return [(n >> 16) & 0xff, (n >> 8) & 0xff, n & 0xff]
+}
+
+function makePng(size, bgHex, fgHex) {
+  const [br, bg, bb] = hexToRgb(bgHex)
+  const [fr, fg, fb] = hexToRgb(fgHex)
+  const cx = size / 2
+  const cy = size / 2
+  const r = size * 0.3
+
+  const raw = Buffer.alloc(size * (1 + size * 3))
+  for (let y = 0; y < size; y++) {
+    const rowStart = y * (1 + size * 3)
+    raw[rowStart] = 0 // filter: none
+    for (let x = 0; x < size; x++) {
+      const dx = x - cx
+      const dy = y - cy
+      const inCircle = dx * dx + dy * dy <= r * r
+      const off = rowStart + 1 + x * 3
+      if (inCircle) {
+        raw[off] = fr
+        raw[off + 1] = fg
+        raw[off + 2] = fb
+      } else {
+        raw[off] = br
+        raw[off + 1] = bg
+        raw[off + 2] = bb
+      }
+    }
+  }
+
+  const ihdr = Buffer.alloc(13)
+  ihdr.writeUInt32BE(size, 0)
+  ihdr.writeUInt32BE(size, 4)
+  ihdr[8] = 8 // bit depth
+  ihdr[9] = 2 // color type: RGB
+  ihdr[10] = 0
+  ihdr[11] = 0
+  ihdr[12] = 0
+
+  const idatData = deflateSync(raw)
+  const signature = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10])
+  return Buffer.concat([signature, chunk('IHDR', ihdr), chunk('IDAT', idatData), chunk('IEND', Buffer.alloc(0))])
+}
+
+mkdirSync('public/icons', { recursive: true })
+for (const size of [192, 512]) {
+  writeFileSync(`public/icons/icon-${size}x${size}.png`, makePng(size, '#1c1917', '#f5f0e8'))
+}
+console.log('done')
 ```
 
-Expected: two PNG files exist. (Swap for real branding art whenever Chase has it — this unblocks "installable" for now.)
+```bash
+node scripts/gen-icons.mjs
+```
+
+Expected: two valid PNG files exist at the stated sizes. Verify with `file public/icons/*.png` (expect `PNG image data, 192 x 192, 8-bit/color RGB` and the 512 equivalent) — this exact script was run and verified to produce correctly-sized, correctly-colored RGB PNGs before being added to this plan. (Swap for real branding art whenever Chase has it — this unblocks "installable" for now.)
 
 - [ ] **Step 8: Nav bar + root layout wiring**
 

@@ -1,0 +1,22 @@
+node_modules
+.next
+out
+build
+coverage
+next-env.d.ts
+public/sw*
+public/swe-worker*
+public/icons
+pnpm-lock.yaml
+package-lock.json
+
+# Generated/vendored, not hand-formatted
+drizzle/meta
+
+# Prose content — hand-authored, not code
+docs
+knowledge
+CLAUDE.md
+AGENTS.md
+.superpowers
+.vscode
