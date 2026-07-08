@@ -26,7 +26,13 @@ describe('lookupByBarcode', () => {
   })
 
   it('returns a catalog hit when the barcode is already known', async () => {
-    dbState.rows = [{ id: 'c1', name: 'Julio Madrid Caturra Nitro', roasterName: 'Tinker Coffee Co.' }]
+    dbState.rows = [
+      {
+        id: 'c1',
+        name: 'Julio Madrid Caturra Nitro',
+        roasterName: 'Tinker Coffee Co.',
+      },
+    ]
     const { lookupByBarcode } = await import('./barcodeLookup')
     const result = await lookupByBarcode('012345678905')
     expect(result).toEqual({
@@ -48,7 +54,11 @@ describe('lookupByBarcode', () => {
     })
     const { lookupByBarcode } = await import('./barcodeLookup')
     const result = await lookupByBarcode('999999999999')
-    expect(result).toEqual({ source: 'open_food_facts', productName: 'Some Grocery Coffee', brand: 'BigBrand' })
+    expect(result).toEqual({
+      source: 'open_food_facts',
+      productName: 'Some Grocery Coffee',
+      brand: 'BigBrand',
+    })
   })
 
   it('returns not_found when neither the catalog nor Open Food Facts has it', async () => {

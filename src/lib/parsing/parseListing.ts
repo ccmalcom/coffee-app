@@ -45,7 +45,8 @@ async function callOnce(rawText: string) {
 }
 
 function bestEffortFallback(rawText: string): ParsedListing {
-  const firstLine = rawText.split('\n').find((l) => l.trim().length > 0) ?? 'Unknown listing'
+  const firstLine =
+    rawText.split('\n').find((l) => l.trim().length > 0) ?? 'Unknown listing'
   return {
     roasterName: firstLine.slice(0, 200),
     roasterWebsite: null,
@@ -76,12 +77,21 @@ export async function parseListing(rawText: string): Promise<ParsedListing> {
       lastError = result.error
     } catch (err) {
       lastError = err
-      if (err instanceof Error && /api|network|rate.?limit|timeout/i.test(err.message) && attempt === 1) {
-        throw new ListingParseError(`Anthropic API call failed after retry: ${err.message}`)
+      if (
+        err instanceof Error &&
+        /api|network|rate.?limit|timeout/i.test(err.message) &&
+        attempt === 1
+      ) {
+        throw new ListingParseError(
+          `Anthropic API call failed after retry: ${err.message}`,
+        )
       }
     }
   }
 
-  console.warn('parseListing: both attempts failed validation, falling back to LOW-confidence row', lastError)
+  console.warn(
+    'parseListing: both attempts failed validation, falling back to LOW-confidence row',
+    lastError,
+  )
   return bestEffortFallback(rawText)
 }

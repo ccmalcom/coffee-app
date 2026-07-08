@@ -28,9 +28,15 @@ describe('parseListing', () => {
         producer: 'Julio Madrid',
         variety: 'Caturra',
         process: 'nitro_washed',
-        processDetail: 'Nitro Washed (nitrogen-flushed anaerobic fermentation, then washed)',
+        processDetail:
+          'Nitro Washed (nitrogen-flushed anaerobic fermentation, then washed)',
         flavorOrigin: 'process',
-        tastingNotes: ['watermelon bubble gum', 'strawberry yogurt candy', 'mango creamsicle', 'pink lemonade'],
+        tastingNotes: [
+          'watermelon bubble gum',
+          'strawberry yogurt candy',
+          'mango creamsicle',
+          'pink lemonade',
+        ],
         priceCents: 2400,
         sizeGrams: 340,
         parseConfidence: 'HIGH',
@@ -80,7 +86,9 @@ describe('parseListing', () => {
       .mockResolvedValueOnce({ parsed_output: { coffeeName: '' } })
 
     const { parseListing } = await import('./parseListing')
-    const result = await parseListing('Some Roaster - Some Coffee, barely any info')
+    const result = await parseListing(
+      'Some Roaster - Some Coffee, barely any info',
+    )
 
     expect(result.parseConfidence).toBe('LOW')
     expect(result.coffeeName.length).toBeGreaterThan(0)

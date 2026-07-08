@@ -69,8 +69,14 @@ describe('addCoffeeFromListing', () => {
   })
 
   it('parses, dedupes, and creates a candidate library entry', async () => {
-    parseListingMock.mockResolvedValue({ coffeeName: 'Test Coffee', parseConfidence: 'HIGH' })
-    findOrCreateCoffeeMock.mockResolvedValue({ coffeeId: 'coffee-1', wasExisting: false })
+    parseListingMock.mockResolvedValue({
+      coffeeName: 'Test Coffee',
+      parseConfidence: 'HIGH',
+    })
+    findOrCreateCoffeeMock.mockResolvedValue({
+      coffeeId: 'coffee-1',
+      wasExisting: false,
+    })
 
     const { addCoffeeFromListing } = await import('./coffee')
     const result = await addCoffeeFromListing({ rawText: 'some listing text' })
@@ -107,17 +113,37 @@ describe('rateCoffee', () => {
 
   it('updates rating and review on the existing library entry', async () => {
     dbState.libraryEntries = [
-      { id: 'le-1', userId: 'user-1', coffeeId: 'coffee-1', status: 'owned', rating: null, review: null },
+      {
+        id: 'le-1',
+        userId: 'user-1',
+        coffeeId: 'coffee-1',
+        status: 'owned',
+        rating: null,
+        review: null,
+      },
     ]
     const { rateCoffee } = await import('./coffee')
-    await rateCoffee({ coffeeId: 'coffee-1', rating: 4, review: 'Great strawberry candy notes' })
+    await rateCoffee({
+      coffeeId: 'coffee-1',
+      rating: 4,
+      review: 'Great strawberry candy notes',
+    })
     expect(dbState.libraryEntries[0].rating).toBe(4)
-    expect(dbState.libraryEntries[0].review).toBe('Great strawberry candy notes')
+    expect(dbState.libraryEntries[0].review).toBe(
+      'Great strawberry candy notes',
+    )
   })
 
   it('preserves the existing status when rating an entry without an explicit status', async () => {
     dbState.libraryEntries = [
-      { id: 'le-1', userId: 'user-1', coffeeId: 'coffee-1', status: 'wishlist', rating: null, review: null },
+      {
+        id: 'le-1',
+        userId: 'user-1',
+        coffeeId: 'coffee-1',
+        status: 'wishlist',
+        rating: null,
+        review: null,
+      },
     ]
     const { rateCoffee } = await import('./coffee')
     await rateCoffee({ coffeeId: 'coffee-1', rating: 5 })

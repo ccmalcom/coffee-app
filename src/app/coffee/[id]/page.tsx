@@ -20,7 +20,11 @@ export default async function CoffeeDetailPage({
         {coffee.originCountry && (
           <>
             <dt className="text-gray-500">Origin</dt>
-            <dd>{[coffee.originCountry, coffee.originRegion].filter(Boolean).join(', ')}</dd>
+            <dd>
+              {[coffee.originCountry, coffee.originRegion]
+                .filter(Boolean)
+                .join(', ')}
+            </dd>
           </>
         )}
         {coffee.variety && (
@@ -40,14 +44,21 @@ export default async function CoffeeDetailPage({
       {coffee.tastingNotes.length > 0 && (
         <div className="mt-3 flex flex-wrap gap-1">
           {coffee.tastingNotes.map((note) => (
-            <span key={note} className="text-xs bg-gray-100 rounded-full px-2 py-1">
+            <span
+              key={note}
+              className="text-xs bg-gray-100 rounded-full px-2 py-1"
+            >
               {note}
             </span>
           ))}
         </div>
       )}
 
-      <RateReviewForm coffeeId={coffee.id} initialRating={coffee.rating} initialReview={coffee.review} />
+      <RateReviewForm
+        coffeeId={coffee.id}
+        initialRating={coffee.rating}
+        initialReview={coffee.review}
+      />
     </main>
   )
 }

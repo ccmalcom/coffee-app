@@ -20,7 +20,9 @@ vi.mock('@/lib/db', () => ({
       from: (table: typeof roasters | typeof coffees) => ({
         where: () => {
           const isRoasters = table === roasters
-          return Promise.resolve(isRoasters ? dbState.roasters : dbState.coffees)
+          return Promise.resolve(
+            isRoasters ? dbState.roasters : dbState.coffees,
+          )
         },
       }),
     }),
@@ -62,13 +64,19 @@ describe('findOrCreateCoffee', () => {
 
   it('creates a new roaster and coffee when nothing matches', async () => {
     const { findOrCreateCoffee } = await import('./dedupe')
-    const result = await findOrCreateCoffee(basicParsed, { listingUrl: 'https://tinkercoffee.com/products/julio' })
+    const result = await findOrCreateCoffee(basicParsed, {
+      listingUrl: 'https://tinkercoffee.com/products/julio',
+    })
     expect(result.wasExisting).toBe(false)
     expect(dbState.coffees).toHaveLength(1)
   })
 
   it('matches an existing coffee by barcode', async () => {
-    dbState.roasters.push({ id: 'r1', name: 'Tinker Coffee Co.', website: null })
+    dbState.roasters.push({
+      id: 'r1',
+      name: 'Tinker Coffee Co.',
+      website: null,
+    })
     dbState.coffees.push({
       id: 'c1',
       roasterId: 'r1',
@@ -78,13 +86,19 @@ describe('findOrCreateCoffee', () => {
       parseConfidence: 'HIGH',
     })
     const { findOrCreateCoffee } = await import('./dedupe')
-    const result = await findOrCreateCoffee(basicParsed, { barcode: '012345678905' })
+    const result = await findOrCreateCoffee(basicParsed, {
+      barcode: '012345678905',
+    })
     expect(result.wasExisting).toBe(true)
     expect(result.coffeeId).toBe('c1')
   })
 
   it('matches an existing coffee by fuzzy roaster+name when no barcode/URL match', async () => {
-    dbState.roasters.push({ id: 'r1', name: 'Tinker Coffee Co.', website: null })
+    dbState.roasters.push({
+      id: 'r1',
+      name: 'Tinker Coffee Co.',
+      website: null,
+    })
     dbState.coffees.push({
       id: 'c1',
       roasterId: 'r1',

@@ -43,7 +43,10 @@ describe('ParsedListingSchema', () => {
   })
 
   it('requires roasterName and coffeeName', () => {
-    const result = ParsedListingSchema.safeParse({ roasterName: '', coffeeName: '' })
+    const result = ParsedListingSchema.safeParse({
+      roasterName: '',
+      coffeeName: '',
+    })
     expect(result.success).toBe(false)
   })
 })

@@ -12,8 +12,18 @@ import { BarcodeScanner } from './BarcodeScanner'
 type Mode = 'paste' | 'scan'
 type BarcodeState =
   | { step: 'idle' }
-  | { step: 'catalog_hit'; coffeeName: string; roasterName: string; coffeeId: string }
-  | { step: 'off_hit'; barcode: string; productName: string; brand: string | null }
+  | {
+      step: 'catalog_hit'
+      coffeeName: string
+      roasterName: string
+      coffeeId: string
+    }
+  | {
+      step: 'off_hit'
+      barcode: string
+      productName: string
+      brand: string | null
+    }
   | { step: 'not_found'; barcode: string }
 
 export function AddCoffeeForm() {
@@ -21,7 +31,9 @@ export function AddCoffeeForm() {
   const [mode, setMode] = useState<Mode>('paste')
   const [rawText, setRawText] = useState('')
   const [listingUrl, setListingUrl] = useState('')
-  const [barcodeState, setBarcodeState] = useState<BarcodeState>({ step: 'idle' })
+  const [barcodeState, setBarcodeState] = useState<BarcodeState>({
+    step: 'idle',
+  })
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
 
@@ -29,7 +41,10 @@ export function AddCoffeeForm() {
     setError(null)
     startTransition(async () => {
       try {
-        const result = await addCoffeeFromListing({ rawText, listingUrl: listingUrl || undefined })
+        const result = await addCoffeeFromListing({
+          rawText,
+          listingUrl: listingUrl || undefined,
+        })
         router.push(`/coffee/${result.coffeeId}`)
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Something went wrong.')
@@ -122,12 +137,17 @@ export function AddCoffeeForm() {
       {mode === 'scan' && (
         <div className="flex flex-col gap-4">
           {barcodeState.step === 'idle' && (
-            <BarcodeScanner onDetected={handleBarcodeDetected} onError={setError} />
+            <BarcodeScanner
+              onDetected={handleBarcodeDetected}
+              onError={setError}
+            />
           )}
 
           {barcodeState.step === 'catalog_hit' && (
             <div className="border rounded p-4">
-              <p className="font-medium">You&apos;ve had this — {barcodeState.roasterName}</p>
+              <p className="font-medium">
+                You&apos;ve had this — {barcodeState.roasterName}
+              </p>
               <p>{barcodeState.coffeeName}</p>
               <button
                 type="button"
@@ -139,7 +159,8 @@ export function AddCoffeeForm() {
             </div>
           )}
 
-          {(barcodeState.step === 'off_hit' || barcodeState.step === 'not_found') && (
+          {(barcodeState.step === 'off_hit' ||
+            barcodeState.step === 'not_found') && (
             <div className="flex flex-col gap-3">
               <p className="text-sm">
                 {barcodeState.step === 'off_hit'

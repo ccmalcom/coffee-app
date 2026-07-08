@@ -31,6 +31,18 @@
           }
         ]
       }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/stop-quality-check.sh",
+            "args": [],
+            "timeout": 120
+          }
+        ]
+      }
     ]
   }
 }

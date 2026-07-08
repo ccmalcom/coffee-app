@@ -24,9 +24,17 @@ export const processEnum = pgEnum('process', [
   'other',
 ])
 
-export const flavorOriginEnum = pgEnum('flavor_origin', ['process', 'added', 'unknown'])
+export const flavorOriginEnum = pgEnum('flavor_origin', [
+  'process',
+  'added',
+  'unknown',
+])
 
-export const parseConfidenceEnum = pgEnum('parse_confidence', ['HIGH', 'MEDIUM', 'LOW'])
+export const parseConfidenceEnum = pgEnum('parse_confidence', [
+  'HIGH',
+  'MEDIUM',
+  'LOW',
+])
 
 export const roasters = pgTable('roasters', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -35,7 +43,9 @@ export const roasters = pgTable('roasters', {
   location: text('location'),
   watched: boolean('watched').notNull().default(false),
   addedVia: addedViaEnum('added_via').notNull().default('manual'),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
 })
 
 export const coffees = pgTable('coffees', {
@@ -60,7 +70,13 @@ export const coffees = pgTable('coffees', {
   barcode: varchar('barcode', { length: 64 }).unique(),
   priceCents: integer('price_cents'),
   sizeGrams: integer('size_grams'),
-  parseConfidence: parseConfidenceEnum('parse_confidence').notNull().default('LOW'),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  parseConfidence: parseConfidenceEnum('parse_confidence')
+    .notNull()
+    .default('LOW'),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
 })

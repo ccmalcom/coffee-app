@@ -2,11 +2,19 @@
 
 import { eq, and, desc } from 'drizzle-orm'
 import { db } from '@/lib/db'
-import { coffees, roasters, libraryEntries, type libraryStatusEnum } from '@/lib/db/schema'
+import {
+  coffees,
+  roasters,
+  libraryEntries,
+  type libraryStatusEnum,
+} from '@/lib/db/schema'
 import { requireUserId } from '@/lib/auth/requireUserId'
 import { parseListing, ListingParseError } from '@/lib/parsing/parseListing'
 import { findOrCreateCoffee } from '@/lib/catalog/dedupe'
-import { lookupByBarcode, type BarcodeLookupResult } from '@/lib/catalog/barcodeLookup'
+import {
+  lookupByBarcode,
+  type BarcodeLookupResult,
+} from '@/lib/catalog/barcodeLookup'
 
 type LibraryStatus = (typeof libraryStatusEnum.enumValues)[number]
 
@@ -14,7 +22,12 @@ async function upsertOwnedEntry(userId: string, coffeeId: string) {
   const existing = await db
     .select()
     .from(libraryEntries)
-    .where(and(eq(libraryEntries.userId, userId), eq(libraryEntries.coffeeId, coffeeId)))
+    .where(
+      and(
+        eq(libraryEntries.userId, userId),
+        eq(libraryEntries.coffeeId, coffeeId),
+      ),
+    )
 
   if (existing.length > 0) return existing[0]
 
@@ -29,7 +42,11 @@ export async function addCoffeeFromListing(input: {
   rawText: string
   listingUrl?: string
   barcode?: string
-}): Promise<{ coffeeId: string; wasExisting: boolean; parseConfidence: string }> {
+}): Promise<{
+  coffeeId: string
+  wasExisting: boolean
+  parseConfidence: string
+}> {
   const userId = await requireUserId()
 
   let parsed
@@ -37,7 +54,9 @@ export async function addCoffeeFromListing(input: {
     parsed = await parseListing(input.rawText)
   } catch (err) {
     if (err instanceof ListingParseError) {
-      throw new Error('Could not reach the coffee parser right now — try again in a moment.')
+      throw new Error(
+        'Could not reach the coffee parser right now — try again in a moment.',
+      )
     }
     throw err
   }
@@ -52,14 +71,16 @@ export async function addCoffeeFromListing(input: {
   return { coffeeId, wasExisting, parseConfidence: parsed.parseConfidence }
 }
 
-export async function addCoffeeFromBarcode(barcode: string): Promise<BarcodeLookupResult> {
+export async function addCoffeeFromBarcode(
+  barcode: string,
+): Promise<BarcodeLookupResult> {
   await requireUserId()
   return lookupByBarcode(barcode)
 }
 
 export async function confirmBarcodeCoffee(
   barcode: string,
-  rawText: string
+  rawText: string,
 ): Promise<{ coffeeId: string; wasExisting: boolean }> {
   const userId = await requireUserId()
 
@@ -68,12 +89,16 @@ export async function confirmBarcodeCoffee(
     parsed = await parseListing(rawText)
   } catch (err) {
     if (err instanceof ListingParseError) {
-      throw new Error('Could not reach the coffee parser right now — try again in a moment.')
+      throw new Error(
+        'Could not reach the coffee parser right now — try again in a moment.',
+      )
     }
     throw err
   }
 
-  const { coffeeId, wasExisting } = await findOrCreateCoffee(parsed, { barcode })
+  const { coffeeId, wasExisting } = await findOrCreateCoffee(parsed, {
+    barcode,
+  })
   await upsertOwnedEntry(userId, coffeeId)
   return { coffeeId, wasExisting }
 }
@@ -89,7 +114,12 @@ export async function rateCoffee(input: {
   const existing = await db
     .select()
     .from(libraryEntries)
-    .where(and(eq(libraryEntries.userId, userId), eq(libraryEntries.coffeeId, input.coffeeId)))
+    .where(
+      and(
+        eq(libraryEntries.userId, userId),
+        eq(libraryEntries.coffeeId, input.coffeeId),
+      ),
+    )
 
   if (existing.length > 0) {
     // Preserve the entry's current status unless the caller explicitly passed one —
@@ -102,7 +132,12 @@ export async function rateCoffee(input: {
         status: input.status ?? existing[0].status,
         updatedAt: new Date(),
       })
-      .where(and(eq(libraryEntries.userId, userId), eq(libraryEntries.coffeeId, input.coffeeId)))
+      .where(
+        and(
+          eq(libraryEntries.userId, userId),
+          eq(libraryEntries.coffeeId, input.coffeeId),
+        ),
+      )
     return
   }
 
@@ -131,7 +166,9 @@ export type LibraryEntryWithCoffee = {
   review: string | null
 }
 
-export async function listLibrary(status?: LibraryStatus): Promise<LibraryEntryWithCoffee[]> {
+export async function listLibrary(
+  status?: LibraryStatus,
+): Promise<LibraryEntryWithCoffee[]> {
   const userId = await requireUserId()
   const whereClause = status
     ? and(eq(libraryEntries.userId, userId), eq(libraryEntries.status, status))
@@ -172,7 +209,9 @@ export type CoffeeDetail = {
   status: LibraryStatus | null
 }
 
-export async function getCoffeeDetail(coffeeId: string): Promise<CoffeeDetail | null> {
+export async function getCoffeeDetail(
+  coffeeId: string,
+): Promise<CoffeeDetail | null> {
   const userId = await requireUserId()
 
   const coffeeRows = await db
@@ -195,9 +234,18 @@ export async function getCoffeeDetail(coffeeId: string): Promise<CoffeeDetail | 
   if (coffeeRows.length === 0) return null
 
   const entryRows = await db
-    .select({ rating: libraryEntries.rating, review: libraryEntries.review, status: libraryEntries.status })
+    .select({
+      rating: libraryEntries.rating,
+      review: libraryEntries.review,
+      status: libraryEntries.status,
+    })
     .from(libraryEntries)
-    .where(and(eq(libraryEntries.userId, userId), eq(libraryEntries.coffeeId, coffeeId)))
+    .where(
+      and(
+        eq(libraryEntries.userId, userId),
+        eq(libraryEntries.coffeeId, coffeeId),
+      ),
+    )
 
   const entry = entryRows[0]
 

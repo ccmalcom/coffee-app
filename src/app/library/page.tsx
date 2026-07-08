@@ -23,7 +23,10 @@ export default async function LibraryPage({
     <main className="max-w-lg mx-auto p-4 flex flex-col gap-4">
       <div className="flex justify-between items-center">
         <h1 className="text-xl font-semibold">Library</h1>
-        <Link href="/coffee/add" className="bg-black text-white rounded px-3 py-1 text-sm">
+        <Link
+          href="/coffee/add"
+          className="bg-black text-white rounded px-3 py-1 text-sm"
+        >
           + Add coffee
         </Link>
       </div>
