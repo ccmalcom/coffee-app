@@ -1,2 +1,2 @@
-// Populated in Tasks 6-7.
 export * from './catalog'
+export * from './user'

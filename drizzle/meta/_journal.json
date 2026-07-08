@@ -8,6 +8,13 @@
       "when": 1783474486286,
       "tag": "0000_salty_paper_doll",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1783474740279,
+      "tag": "0001_silky_princess_powerful",
+      "breakpoints": true
     }
   ]
 }
