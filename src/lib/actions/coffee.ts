@@ -85,15 +85,40 @@ export async function rateCoffee(input: {
   status?: LibraryStatus
 }): Promise<void> {
   const userId = await requireUserId()
+
+  const existing = await db
+    .select()
+    .from(libraryEntries)
+    .where(and(eq(libraryEntries.userId, userId), eq(libraryEntries.coffeeId, input.coffeeId)))
+
+  if (existing.length > 0) {
+    // Preserve the entry's current status unless the caller explicitly passed one —
+    // rating a wishlist/finished coffee shouldn't silently reset it to 'owned'.
+    await db
+      .update(libraryEntries)
+      .set({
+        rating: input.rating,
+        review: input.review ?? null,
+        status: input.status ?? existing[0].status,
+        updatedAt: new Date(),
+      })
+      .where(and(eq(libraryEntries.userId, userId), eq(libraryEntries.coffeeId, input.coffeeId)))
+    return
+  }
+
+  // No entry exists yet (e.g. rating a Discovery candidate) — create one instead
+  // of letting the UPDATE silently match zero rows and lose the rating.
   await db
-    .update(libraryEntries)
-    .set({
+    .insert(libraryEntries)
+    .values({
+      userId,
+      coffeeId: input.coffeeId,
       rating: input.rating,
       review: input.review ?? null,
       status: input.status ?? 'owned',
-      updatedAt: new Date(),
+      acquiredAt: new Date(),
     })
-    .where(and(eq(libraryEntries.userId, userId), eq(libraryEntries.coffeeId, input.coffeeId)))
+    .returning()
 }
 
 export type LibraryEntryWithCoffee = {

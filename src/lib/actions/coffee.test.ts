@@ -31,6 +31,9 @@ const dbState = {
   }>,
 }
 
+// Tracks which row a `.where(...)` clause should match, since the mock db
+// doesn't parse Drizzle's `and(eq(...), eq(...))` expressions. Tests set
+// `dbState.libraryEntries` to just the rows the query would have matched.
 vi.mock('@/lib/db', () => ({
   db: {
     select: () => ({
@@ -98,6 +101,10 @@ describe('addCoffeeFromBarcode', () => {
 })
 
 describe('rateCoffee', () => {
+  beforeEach(() => {
+    dbState.libraryEntries = []
+  })
+
   it('updates rating and review on the existing library entry', async () => {
     dbState.libraryEntries = [
       { id: 'le-1', userId: 'user-1', coffeeId: 'coffee-1', status: 'owned', rating: null, review: null },
@@ -106,5 +113,28 @@ describe('rateCoffee', () => {
     await rateCoffee({ coffeeId: 'coffee-1', rating: 4, review: 'Great strawberry candy notes' })
     expect(dbState.libraryEntries[0].rating).toBe(4)
     expect(dbState.libraryEntries[0].review).toBe('Great strawberry candy notes')
+  })
+
+  it('preserves the existing status when rating an entry without an explicit status', async () => {
+    dbState.libraryEntries = [
+      { id: 'le-1', userId: 'user-1', coffeeId: 'coffee-1', status: 'wishlist', rating: null, review: null },
+    ]
+    const { rateCoffee } = await import('./coffee')
+    await rateCoffee({ coffeeId: 'coffee-1', rating: 5 })
+    expect(dbState.libraryEntries[0].status).toBe('wishlist')
+  })
+
+  it('creates a new library entry when rating a coffee with no existing entry', async () => {
+    dbState.libraryEntries = []
+    const { rateCoffee } = await import('./coffee')
+    await rateCoffee({ coffeeId: 'coffee-2', rating: 3, review: 'Decent' })
+    expect(dbState.libraryEntries).toHaveLength(1)
+    expect(dbState.libraryEntries[0]).toMatchObject({
+      userId: 'user-1',
+      coffeeId: 'coffee-2',
+      status: 'owned',
+      rating: 3,
+      review: 'Decent',
+    })
   })
 })
