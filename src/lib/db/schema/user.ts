@@ -79,6 +79,10 @@ export const equipment = pgTable('equipment', {
   model: text('model'),
   nickname: text('nickname').notNull(),
   notes: text('notes'),
+  // Plan 2: NULL = single-dial grinder (or not configured for numeric
+  // interpolation). Set = secondary/micro dial exists; this many micro steps
+  // equal one macro notch. Machines leave this NULL.
+  microStepsPerMacroNotch: integer('micro_steps_per_macro_notch'),
   createdAt: timestamp('created_at', { withTimezone: true })
     .notNull()
     .defaultNow(),
@@ -103,6 +107,11 @@ export const shots = pgTable('shots', {
   yieldGrams: real('yield_g').notNull(),
   timeSeconds: real('time_s').notNull(),
   grindSetting: text('grind_setting').notNull(),
+  // Plan 2: numeric grind representation. NULL whenever the grind setting
+  // isn't numeric — those shots stay interpolation-ineligible.
+  grindMacro: real('grind_macro'),
+  grindMicro: real('grind_micro'),
+  grindPosition: real('grind_position'),
   outcomeTags: shotOutcomeTagEnum('outcome_tags')
     .array()
     .notNull()
