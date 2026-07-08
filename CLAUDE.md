@@ -10,7 +10,7 @@ Next.js 16 (App Router) on Vercel · Supabase (Postgres + Auth) · Drizzle ORM (
 ## Commands
 - `npm run dev` / `npm run build` / `npm run start`
 - `npm run lint` · `npm run test` (watch) · `npm run test:run` (CI mode)
-- `npm run db:generate` · `npm run db:push` · `npm run db:studio` — Drizzle migrations; pass `--env-file=.env.local` if env vars aren't already loaded
+- `npm run db:generate` · `npm run db:push` · `npm run db:studio` — Drizzle migrations. drizzle-kit 0.31.10 does NOT accept `--env-file` itself; load env with Node's own flag instead: `node --env-file=.env.local ./node_modules/drizzle-kit/bin.cjs <generate|push|studio>`
 - `npm run verify:db` — confirms `DATABASE_URL` is reachable
 
 ## Locked architectural decisions (do not relitigate)
@@ -37,6 +37,12 @@ Next.js 16 (App Router) on Vercel · Supabase (Postgres + Auth) · Drizzle ORM (
 - **Plan 4:** Discovery engine (sourcing, scoring, feed).
 
 Schema for all of the above already exists after Plan 1 (Drizzle tables for `equipment`, `shots`, `taste_profile`, `directives`, `discovery_runs`) — later plans add UI/logic on existing tables, not new migrations for these, unless a plan says otherwise.
+
+## Local dev gotchas
+- Supabase's direct host (`db.<ref>.supabase.co`) is IPv6-only — use the pooler for both `DATABASE_URL`/`DIRECT_URL` on IPv4-only networks: `postgresql://postgres.<ref>:<pw>@aws-0-<region>.pooler.supabase.com:{6543,5432}/postgres`.
+- Next 16 defaults to Turbopack, but Serwist (PWA) requires webpack — `dev`/`build` npm scripts already run with `--webpack` baked in; don't "fix" this back to plain `next dev`/`next build`.
+- Mocking `@/lib/db` in tests: route mocked table queries by reference equality (`table === roasters`), not `table._.name` — that property doesn't exist on real `drizzle-orm` v0.45.2 `pgTable` objects.
+- `src/lib/db/schema/user.ts`'s `auth.users` stub is for FK typing only. If `drizzle-kit generate` emits a `CREATE TABLE auth.users` statement, strip it from the migration before `push` — Supabase already owns that table.
 
 ## Infra already provisioned
 - GitHub: `https://github.com/ccmalcom/coffee-app.git`
