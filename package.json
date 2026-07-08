@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "next dev --webpack",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",
     "test": "vitest",
@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.110.0",
+    "@serwist/next": "^9.5.11",
     "@supabase/ssr": "^0.12.0",
     "@supabase/supabase-js": "^2.110.1",
     "@zxing/browser": "^0.2.1",
@@ -39,6 +40,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.10",
     "jsdom": "^29.1.1",
+    "serwist": "^9.5.11",
     "tailwindcss": "^4",
     "tsx": "^4.23.0",
     "typescript": "^5",
