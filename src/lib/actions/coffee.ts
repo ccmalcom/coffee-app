@@ -62,7 +62,17 @@ export async function confirmBarcodeCoffee(
   rawText: string
 ): Promise<{ coffeeId: string; wasExisting: boolean }> {
   const userId = await requireUserId()
-  const parsed = await parseListing(rawText)
+
+  let parsed
+  try {
+    parsed = await parseListing(rawText)
+  } catch (err) {
+    if (err instanceof ListingParseError) {
+      throw new Error('Could not reach the coffee parser right now — try again in a moment.')
+    }
+    throw err
+  }
+
   const { coffeeId, wasExisting } = await findOrCreateCoffee(parsed, { barcode })
   await upsertOwnedEntry(userId, coffeeId)
   return { coffeeId, wasExisting }
