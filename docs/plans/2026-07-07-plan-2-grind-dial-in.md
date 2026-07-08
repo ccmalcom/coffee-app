@@ -2360,11 +2360,11 @@ git commit -m "feat(coffee): shot history + dial-in cards + log-shot CTA on deta
 
 This is the final UI pass across the assembled feature, distinct from the per-task passes (which verified one component in isolation). Follow the shared "Browser UI Verification" procedure with the dev server running and an authenticated session.
 
-- [ ] **Step 1: Equipment round-trip**
+- [x] **Step 1: Equipment round-trip**
 
 At `/equipment`, add a grinder with the micro-dial toggle on (steps = `6`) and a machine. Confirm both persist and the grinder shows `· micro ÷6`.
 
-- [ ] **Step 2: Drive a combo from cold-start to a live suggestion**
+- [x] **Step 2: Drive a combo from cold-start to a live suggestion**
 
 Pick a coffee. At `/coffee/<id>/log`, log ≥5 shots on the *same* grinder+machine at ≥2 distinct grind positions, with ≥1 tagged `balanced` or `excellent`. Confirm the dial-in card walks through the gating states as data accrues:
 - <5 shots → "log N more shots…"
@@ -2372,19 +2372,19 @@ Pick a coffee. At `/coffee/<id>/log`, log ≥5 shots on the *same* grinder+machi
 - ≥5, positive, but all one position → "try a shot at a different setting…"
 - eligible → a `display → ~Ns` suggestion with the evidence list.
 
-- [ ] **Step 3: New-bag baseline**
+- [x] **Step 3: New-bag baseline**
 
 Once the grinder+machine pair has ≥15 total shots (across any coffee) including a positive-tagged one, open a *different* coffee with zero shots on that pair at `/coffee/<newId>/log`. Confirm the card shows the "Rough starting point: <display>" baseline (clearly labeled as an estimate), and that it's replaced by a combo suggestion the moment that new combo gets its own shots.
 
-- [ ] **Step 4: Coffee detail integration**
+- [x] **Step 4: Coffee detail integration**
 
 On a coffee with logged shots, confirm the detail page shows per-combo dial-in cards and the shot-history list, and the "Log shot" CTA routes to the log form.
 
-- [ ] **Step 5: Console + regression sweep**
+- [x] **Step 5: Console + regression sweep**
 
 Across the above, confirm the console stays clean (no hydration errors, no failed server actions). Then run the full non-UI suite once more: `npm run test:run && npm run typecheck && npm run lint` — all green, permanent Julio Madrid fixture test still passing.
 
-- [ ] **Step 6: Record results**
+- [x] **Step 6: Record results**
 
 Write a short pass/fail summary of each step. If any step required a code fix, commit it with a `fix(...)` message and note it; otherwise no commit for this task.
 
