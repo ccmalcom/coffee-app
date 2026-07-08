@@ -1,0 +1,286 @@
+{
+  "id": "119c60dc-8d1d-4630-a9cc-51480a2e3993",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.coffees": {
+      "name": "coffees",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "roaster_id": {
+          "name": "roaster_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "origin_country": {
+          "name": "origin_country",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "origin_region": {
+          "name": "origin_region",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "producer": {
+          "name": "producer",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "variety": {
+          "name": "variety",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "process": {
+          "name": "process",
+          "type": "process",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "process_detail": {
+          "name": "process_detail",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "flavor_origin": {
+          "name": "flavor_origin",
+          "type": "flavor_origin",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'unknown'"
+        },
+        "tasting_notes": {
+          "name": "tasting_notes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::text[]"
+        },
+        "raw_listing_text": {
+          "name": "raw_listing_text",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "listing_url": {
+          "name": "listing_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "barcode": {
+          "name": "barcode",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "price_cents": {
+          "name": "price_cents",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "size_grams": {
+          "name": "size_grams",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "parse_confidence": {
+          "name": "parse_confidence",
+          "type": "parse_confidence",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'LOW'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "coffees_roaster_id_roasters_id_fk": {
+          "name": "coffees_roaster_id_roasters_id_fk",
+          "tableFrom": "coffees",
+          "tableTo": "roasters",
+          "columnsFrom": [
+            "roaster_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "coffees_listing_url_unique": {
+          "name": "coffees_listing_url_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "listing_url"
+          ]
+        },
+        "coffees_barcode_unique": {
+          "name": "coffees_barcode_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "barcode"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.roasters": {
+      "name": "roasters",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "website": {
+          "name": "website",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "location": {
+          "name": "location",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "watched": {
+          "name": "watched",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "added_via": {
+          "name": "added_via",
+          "type": "added_via",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'manual'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.added_via": {
+      "name": "added_via",
+      "schema": "public",
+      "values": [
+        "manual",
+        "discovery"
+      ]
+    },
+    "public.flavor_origin": {
+      "name": "flavor_origin",
+      "schema": "public",
+      "values": [
+        "process",
+        "added",
+        "unknown"
+      ]
+    },
+    "public.parse_confidence": {
+      "name": "parse_confidence",
+      "schema": "public",
+      "values": [
+        "HIGH",
+        "MEDIUM",
+        "LOW"
+      ]
+    },
+    "public.process": {
+      "name": "process",
+      "schema": "public",
+      "values": [
+        "washed",
+        "natural",
+        "honey",
+        "anaerobic",
+        "carbonic_maceration",
+        "nitro_washed",
+        "co_ferment",
+        "thermal_shock",
+        "other"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
