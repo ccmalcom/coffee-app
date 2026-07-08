@@ -5,6 +5,21 @@
 # in-session instead of silently accumulating.
 cd "${CLAUDE_PROJECT_DIR}" || exit 0
 
+# Skip entirely when there's nothing worth checking: no uncommitted changes,
+# or the only changes are to files typecheck/lint/format wouldn't touch
+# anyway (docs, lockfiles, etc. — mirrors .prettierignore's own exclusions).
+CHANGED=$(git status --porcelain 2>/dev/null | sed -E 's/^.{3}//; s/.* -> //')
+
+if [ -z "$CHANGED" ]; then
+  exit 0
+fi
+
+RELEVANT=$(echo "$CHANGED" | grep -viE '^(docs/|knowledge/|\.vscode/|drizzle/meta/|CLAUDE\.md$|AGENTS\.md$|package-lock\.json$|pnpm-lock\.yaml$)' | grep -E '\.(ts|tsx|js|jsx|mjs|cjs|json|css|ya?ml|md)$')
+
+if [ -z "$RELEVANT" ]; then
+  exit 0
+fi
+
 FAILED=""
 OUTPUT=""
 

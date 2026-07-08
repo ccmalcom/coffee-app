@@ -9,6 +9,9 @@ export function NavBar() {
       <Link href="/coffee/add" className="text-sm">
         Add
       </Link>
+      <Link href="/equipment" className="text-sm">
+        Equipment
+      </Link>
     </nav>
   )
 }

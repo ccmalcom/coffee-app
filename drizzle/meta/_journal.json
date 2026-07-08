@@ -15,6 +15,13 @@
       "when": 1783474740279,
       "tag": "0001_silky_princess_powerful",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1783484691199,
+      "tag": "0002_salty_lady_mastermind",
+      "breakpoints": true
     }
   ]
 }
