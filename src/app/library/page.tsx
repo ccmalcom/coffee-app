@@ -2,7 +2,10 @@ import Link from 'next/link'
 import { listLibrary } from '@/lib/actions/coffee'
 import { CoffeeCard } from '@/components/coffee/CoffeeCard'
 
-const TABS = ['owned', 'wishlist', 'finished'] as const
+// 'wishlist' and 'finished' are omitted for now: no UI path sets those statuses yet
+// (that's Plan 2/3's job), so showing them here would just be permanently-empty dead tabs.
+// Re-add them once status-changing UI exists — the tab loop below is already generic over TABS.
+const TABS = ['owned'] as const
 
 export default async function LibraryPage({
   searchParams,
