@@ -27,14 +27,14 @@ export function SignupForm() {
       action={handleSubmit}
       className="flex flex-col gap-3 max-w-sm mx-auto p-6"
     >
-      <h1 className="text-xl font-semibold">Create account</h1>
+      <h1 className="text-xl font-display font-semibold">Create account</h1>
       {message && <p className="text-sm">{message}</p>}
       <input
         name="email"
         type="email"
         placeholder="Email"
         required
-        className="border rounded p-2"
+        className="rounded border border-surface-raised bg-surface p-2 placeholder:text-text-muted"
       />
       <input
         name="password"
@@ -42,9 +42,12 @@ export function SignupForm() {
         placeholder="Password (min 6 chars)"
         required
         minLength={6}
-        className="border rounded p-2"
+        className="rounded border border-surface-raised bg-surface p-2 placeholder:text-text-muted"
       />
-      <button type="submit" className="bg-black text-white rounded p-2">
+      <button
+        type="submit"
+        className="rounded bg-accent p-2 font-medium text-bg hover:bg-accent-hover"
+      >
         Sign up
       </button>
     </form>
