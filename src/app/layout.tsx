@@ -1,9 +1,22 @@
 import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'
+import { Fraunces, Karla } from 'next/font/google'
 import { NavBar } from '@/components/layout/NavBar'
 import './globals.css'
 
 const APP_NAME = 'Coffee App'
+
+const fraunces = Fraunces({
+  subsets: ['latin'],
+  variable: '--font-fraunces',
+  display: 'swap',
+})
+
+const karla = Karla({
+  subsets: ['latin'],
+  variable: '--font-karla',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   applicationName: APP_NAME,
@@ -14,14 +27,14 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#1c1917',
+  themeColor: '#1E1812',
   width: 'device-width',
   initialScale: 1,
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${fraunces.variable} ${karla.variable}`}>
       <body className="pb-16 md:pb-0">
         <NavBar />
         {children}
