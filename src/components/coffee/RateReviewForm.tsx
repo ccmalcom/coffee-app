@@ -36,7 +36,7 @@ export function RateReviewForm({
   }
 
   return (
-    <div className="flex flex-col gap-2 border-t pt-3 mt-3">
+    <div className="flex flex-col gap-2 border-t border-surface-raised pt-3 mt-3">
       <RatingStars value={rating} onChange={save} />
       <textarea
         value={review}
@@ -44,10 +44,10 @@ export function RateReviewForm({
         onBlur={saveReview}
         placeholder="Notes on this coffee..."
         rows={3}
-        className="border rounded p-2 text-sm"
+        className="rounded border border-surface-raised bg-surface p-2 text-sm placeholder:text-text-muted"
       />
-      {isPending && <p className="text-xs text-gray-400">Saving…</p>}
-      {saved && !isPending && <p className="text-xs text-green-600">Saved</p>}
+      {isPending && <p className="text-xs text-text-muted">Saving…</p>}
+      {saved && !isPending && <p className="text-xs text-success">Saved</p>}
     </div>
   )
 }

@@ -4,6 +4,7 @@ import { getCoffeeDetail } from '@/lib/actions/coffee'
 import { listShotsForCoffee, listCoffeeDialIns } from '@/lib/actions/shots'
 import { RateReviewForm } from '@/components/coffee/RateReviewForm'
 import { DialInCard } from '@/components/shots/DialInCard'
+import { Chip } from '@/components/ui/Chip'
 
 export default async function CoffeeDetailPage({
   params,
@@ -21,13 +22,13 @@ export default async function CoffeeDetailPage({
 
   return (
     <main className="max-w-lg mx-auto p-4">
-      <p className="text-sm text-gray-500">{coffee.roasterName}</p>
-      <h1 className="text-xl font-semibold">{coffee.name}</h1>
+      <p className="text-sm text-text-muted">{coffee.roasterName}</p>
+      <h1 className="text-2xl font-display font-semibold">{coffee.name}</h1>
 
       <dl className="mt-3 text-sm grid grid-cols-2 gap-1">
         {coffee.originCountry && (
           <>
-            <dt className="text-gray-500">Origin</dt>
+            <dt className="text-text-muted">Origin</dt>
             <dd>
               {[coffee.originCountry, coffee.originRegion]
                 .filter(Boolean)
@@ -37,13 +38,13 @@ export default async function CoffeeDetailPage({
         )}
         {coffee.variety && (
           <>
-            <dt className="text-gray-500">Variety</dt>
+            <dt className="text-text-muted">Variety</dt>
             <dd>{coffee.variety}</dd>
           </>
         )}
         {coffee.process && (
           <>
-            <dt className="text-gray-500">Process</dt>
+            <dt className="text-text-muted">Process</dt>
             <dd>{coffee.processDetail ?? coffee.process}</dd>
           </>
         )}
@@ -52,12 +53,7 @@ export default async function CoffeeDetailPage({
       {coffee.tastingNotes.length > 0 && (
         <div className="mt-3 flex flex-wrap gap-1">
           {coffee.tastingNotes.map((note) => (
-            <span
-              key={note}
-              className="text-xs bg-gray-100 rounded-full px-2 py-1"
-            >
-              {note}
-            </span>
+            <Chip key={note}>{note}</Chip>
           ))}
         </div>
       )}
@@ -68,12 +64,12 @@ export default async function CoffeeDetailPage({
         initialReview={coffee.review}
       />
 
-      <section className="mt-6 border-t pt-3">
+      <section className="mt-6 border-t border-surface-raised pt-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-medium text-gray-500">Dial-in</h2>
+          <h2 className="text-sm font-medium text-text-muted">Dial-in</h2>
           <Link
             href={`/coffee/${coffee.id}/log`}
-            className="text-sm bg-black text-white rounded px-3 py-1"
+            className="rounded bg-accent px-3 py-1 text-sm font-medium text-bg hover:bg-accent-hover"
           >
             Log shot
           </Link>
@@ -83,7 +79,7 @@ export default async function CoffeeDetailPage({
           <div className="mt-3 flex flex-col gap-3">
             {dialIns.map((d, i) => (
               <div key={i}>
-                <p className="text-xs text-gray-400 mb-1">
+                <p className="text-xs text-text-muted mb-1">
                   {d.grinderNickname} · {d.machineNickname}
                 </p>
                 <DialInCard state={d.state} />
@@ -94,20 +90,20 @@ export default async function CoffeeDetailPage({
       </section>
 
       <section className="mt-6">
-        <h2 className="text-sm font-medium text-gray-500 mb-2">Shot history</h2>
+        <h2 className="text-sm font-medium text-text-muted mb-2">Shot history</h2>
         {shots.length === 0 ? (
-          <p className="text-sm text-gray-400">No shots logged yet.</p>
+          <p className="text-sm text-text-muted">No shots logged yet.</p>
         ) : (
           <ul className="flex flex-col gap-2">
             {shots.map((s) => (
-              <li key={s.id} className="border rounded p-2 text-sm">
+              <li key={s.id} className="rounded border border-surface-raised bg-surface p-2 text-sm">
                 <div className="flex justify-between">
                   <span className="font-medium">{s.grindSetting}</span>
-                  <span className="text-gray-500">
+                  <span className="text-text-muted">
                     {s.doseGrams}g → {s.yieldGrams}g · {s.timeSeconds}s
                   </span>
                 </div>
-                <div className="text-xs text-gray-400">
+                <div className="text-xs text-text-muted">
                   {s.grinderNickname} · {s.machineNickname}
                   {s.outcomeTags.length > 0 && ` · ${s.outcomeTags.join(', ')}`}
                 </div>
