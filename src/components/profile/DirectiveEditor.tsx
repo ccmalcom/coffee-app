@@ -39,7 +39,7 @@ export function DirectiveEditor({ directive }: { directive: DirectiveView }) {
   }
 
   return (
-    <section className="flex flex-col gap-3 border-t pt-4">
+    <section className="flex flex-col gap-3 border-t border-surface-raised pt-4">
       <h2 className="font-medium">Your goals</h2>
 
       <fieldset className="flex flex-col gap-2">
@@ -49,6 +49,7 @@ export function DirectiveEditor({ directive }: { directive: DirectiveView }) {
               type="checkbox"
               checked={goals.includes(o.value)}
               onChange={() => toggleGoal(o.value)}
+              className="accent-accent"
             />
             {o.label}
           </label>
@@ -64,7 +65,7 @@ export function DirectiveEditor({ directive }: { directive: DirectiveView }) {
             setFreeText(e.target.value)
           }}
           rows={2}
-          className="border rounded p-2"
+          className="rounded border border-surface-raised bg-surface p-2"
         />
       </label>
 
@@ -76,6 +77,7 @@ export function DirectiveEditor({ directive }: { directive: DirectiveView }) {
             setSaved(false)
             setExclude(e.target.checked)
           }}
+          className="accent-accent"
         />
         Exclude added-flavor coffees
       </label>
@@ -84,12 +86,12 @@ export function DirectiveEditor({ directive }: { directive: DirectiveView }) {
         type="button"
         onClick={save}
         disabled={isPending}
-        className="bg-black text-white rounded p-2 disabled:opacity-50 self-start"
+        className="rounded bg-accent p-2 font-medium text-bg hover:bg-accent-hover disabled:opacity-50 self-start"
       >
         {isPending ? 'Saving…' : 'Save goals'}
       </button>
-      {saved && <p role="status" className="text-sm text-green-700">Saved.</p>}
-      {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
+      {saved && <p role="status" className="text-sm text-success">Saved.</p>}
+      {error && <p role="alert" className="text-sm text-danger">{error}</p>}
     </section>
   )
 }

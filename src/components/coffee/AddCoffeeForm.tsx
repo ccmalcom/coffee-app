@@ -93,20 +93,20 @@ export function AddCoffeeForm() {
         <button
           type="button"
           onClick={() => setMode('paste')}
-          className={`px-3 py-1 rounded ${mode === 'paste' ? 'bg-black text-white' : 'bg-gray-200'}`}
+          className={`rounded px-3 py-1 font-medium ${mode === 'paste' ? 'bg-accent text-bg hover:bg-accent-hover' : 'bg-surface text-text-muted'}`}
         >
           Paste / URL
         </button>
         <button
           type="button"
           onClick={() => setMode('scan')}
-          className={`px-3 py-1 rounded ${mode === 'scan' ? 'bg-black text-white' : 'bg-gray-200'}`}
+          className={`rounded px-3 py-1 font-medium ${mode === 'scan' ? 'bg-accent text-bg hover:bg-accent-hover' : 'bg-surface text-text-muted'}`}
         >
           Scan barcode
         </button>
       </div>
 
-      {error && <p className="text-red-600 text-sm">{error}</p>}
+      {error && <p className="text-danger text-sm">{error}</p>}
 
       {mode === 'paste' && (
         <div className="flex flex-col gap-3">
@@ -114,20 +114,20 @@ export function AddCoffeeForm() {
             value={listingUrl}
             onChange={(e) => setListingUrl(e.target.value)}
             placeholder="Listing URL (optional)"
-            className="border rounded p-2"
+            className="rounded border border-surface-raised bg-surface p-2 placeholder:text-text-muted"
           />
           <textarea
             value={rawText}
             onChange={(e) => setRawText(e.target.value)}
             placeholder="Paste the listing text here"
             rows={8}
-            className="border rounded p-2"
+            className="rounded border border-surface-raised bg-surface p-2 placeholder:text-text-muted"
           />
           <button
             type="button"
             onClick={handlePasteSubmit}
             disabled={isPending || rawText.trim().length === 0}
-            className="bg-black text-white rounded p-2 disabled:opacity-50"
+            className="rounded bg-accent p-2 font-medium text-bg hover:bg-accent-hover disabled:opacity-50"
           >
             {isPending ? 'Adding…' : 'Add coffee'}
           </button>
@@ -144,7 +144,7 @@ export function AddCoffeeForm() {
           )}
 
           {barcodeState.step === 'catalog_hit' && (
-            <div className="border rounded p-4">
+            <div className="rounded border border-surface-raised bg-surface p-4">
               <p className="font-medium">
                 You&apos;ve had this — {barcodeState.roasterName}
               </p>
@@ -152,7 +152,7 @@ export function AddCoffeeForm() {
               <button
                 type="button"
                 onClick={() => router.push(`/coffee/${barcodeState.coffeeId}`)}
-                className="mt-3 bg-black text-white rounded px-3 py-2"
+                className="mt-3 rounded bg-accent px-3 py-2 font-medium text-bg hover:bg-accent-hover"
               >
                 View / rate again
               </button>
@@ -172,13 +172,13 @@ export function AddCoffeeForm() {
                 onChange={(e) => setRawText(e.target.value)}
                 placeholder="Paste the listing text (or type what's on the bag)"
                 rows={8}
-                className="border rounded p-2"
+                className="rounded border border-surface-raised bg-surface p-2 placeholder:text-text-muted"
               />
               <button
                 type="button"
                 onClick={() => handleConfirmAfterScan(barcodeState.barcode)}
                 disabled={isPending || rawText.trim().length === 0}
-                className="bg-black text-white rounded p-2 disabled:opacity-50"
+                className="rounded bg-accent p-2 font-medium text-bg hover:bg-accent-hover disabled:opacity-50"
               >
                 {isPending ? 'Adding…' : 'Add coffee'}
               </button>

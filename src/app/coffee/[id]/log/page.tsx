@@ -18,10 +18,10 @@ export default async function LogShotPage({
   if (grinders.length === 0 || machines.length === 0) {
     return (
       <main className="max-w-lg mx-auto p-4">
-        <h1 className="text-xl font-semibold mb-2">Log shot</h1>
-        <p className="text-sm text-gray-600">
+        <h1 className="text-xl font-display font-semibold mb-2">Log shot</h1>
+        <p className="text-sm text-text-muted">
           Add at least one grinder and one machine first.{' '}
-          <Link href="/equipment" className="underline">
+          <Link href="/equipment" className="text-accent underline">
             Go to Equipment
           </Link>
         </p>
@@ -31,7 +31,7 @@ export default async function LogShotPage({
 
   return (
     <main className="max-w-lg mx-auto p-4">
-      <h1 className="text-xl font-semibold mb-3">Log shot</h1>
+      <h1 className="text-xl font-display font-semibold mb-3">Log shot</h1>
       <ShotForm coffeeId={id} grinders={grinders} machines={machines} prefill={prefill} />
     </main>
   )

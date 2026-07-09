@@ -8,19 +8,19 @@ export default async function EquipmentPage() {
 
   return (
     <main className="max-w-lg mx-auto p-4 flex flex-col gap-6">
-      <h1 className="text-xl font-semibold">Equipment</h1>
+      <h1 className="text-xl font-display font-semibold">Equipment</h1>
 
       <section>
-        <h2 className="text-sm font-medium text-gray-500 mb-2">Grinders</h2>
+        <h2 className="text-sm font-medium text-text-muted mb-2">Grinders</h2>
         {grinders.length === 0 ? (
-          <p className="text-sm text-gray-400">No grinders yet.</p>
+          <p className="text-sm text-text-muted">No grinders yet.</p>
         ) : (
           <ul className="flex flex-col gap-1">
             {grinders.map((g) => (
-              <li key={g.id} className="text-sm border rounded p-2">
+              <li key={g.id} className="text-sm rounded border border-surface-raised bg-surface p-2">
                 {g.nickname}
                 {g.microStepsPerMacroNotch !== null && (
-                  <span className="text-gray-400">
+                  <span className="text-text-muted">
                     {' '}
                     · micro ÷{g.microStepsPerMacroNotch}
                   </span>
@@ -32,13 +32,13 @@ export default async function EquipmentPage() {
       </section>
 
       <section>
-        <h2 className="text-sm font-medium text-gray-500 mb-2">Machines</h2>
+        <h2 className="text-sm font-medium text-text-muted mb-2">Machines</h2>
         {machines.length === 0 ? (
-          <p className="text-sm text-gray-400">No machines yet.</p>
+          <p className="text-sm text-text-muted">No machines yet.</p>
         ) : (
           <ul className="flex flex-col gap-1">
             {machines.map((m) => (
-              <li key={m.id} className="text-sm border rounded p-2">
+              <li key={m.id} className="text-sm rounded border border-surface-raised bg-surface p-2">
                 {m.nickname}
               </li>
             ))}

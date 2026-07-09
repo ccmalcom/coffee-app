@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { rebuildProfile, type ProfileView as ProfileViewData } from '@/lib/actions/taste'
 import { MIN_RATED_COFFEES_FOR_PROFILE } from '@/lib/taste/constants'
+import { Chip } from '@/components/ui/Chip'
 
 export function ProfileView({ view }: { view: ProfileViewData }) {
   const router = useRouter()
@@ -25,7 +26,7 @@ export function ProfileView({ view }: { view: ProfileViewData }) {
   if (view.state === 'cold_start') {
     return (
       <section className="flex flex-col gap-2">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-text-muted">
           Not personalized yet — rate a few more coffees ({view.ratedCount} of{' '}
           {MIN_RATED_COFFEES_FOR_PROFILE}). Your stated goals below still guide discovery
           in the meantime.
@@ -42,11 +43,11 @@ export function ProfileView({ view }: { view: ProfileViewData }) {
           type="button"
           onClick={rebuild}
           disabled={isPending}
-          className="bg-black text-white rounded p-2 disabled:opacity-50 self-start"
+          className="rounded bg-accent p-2 font-medium text-bg hover:bg-accent-hover disabled:opacity-50 self-start"
         >
           {isPending ? 'Building…' : 'Build your profile'}
         </button>
-        {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
+        {error && <p role="alert" className="text-sm text-danger">{error}</p>}
       </section>
     )
   }
@@ -55,7 +56,7 @@ export function ProfileView({ view }: { view: ProfileViewData }) {
   return (
     <section className="flex flex-col gap-4">
       {view.state === 'stale' && (
-        <div role="status" className="flex items-center justify-between gap-3 rounded border border-amber-300 bg-amber-50 p-2 text-sm">
+        <div role="status" className="flex items-center justify-between gap-3 rounded border-l-4 border-accent bg-surface-raised p-2 text-sm">
           <span>
             {view.newRatingsSince} new rating{view.newRatingsSince === 1 ? '' : 's'} since last build.
           </span>
@@ -63,29 +64,31 @@ export function ProfileView({ view }: { view: ProfileViewData }) {
             type="button"
             onClick={rebuild}
             disabled={isPending}
-            className="bg-black text-white rounded px-3 py-1 disabled:opacity-50"
+            className="rounded bg-accent px-3 py-1 font-medium text-bg hover:bg-accent-hover disabled:opacity-50"
           >
             {isPending ? 'Rebuilding…' : 'Rebuild profile'}
           </button>
         </div>
       )}
-      {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
+      {error && <p role="alert" className="text-sm text-danger">{error}</p>}
 
       {profile.summary && <p className="text-sm">{profile.summary}</p>}
 
       <div className="flex flex-col gap-2">
         <h3 className="font-medium">Flavor clusters</h3>
         {profile.clusters.length === 0 ? (
-          <p className="text-sm text-gray-600">No strong flavor preferences yet.</p>
+          <p className="text-sm text-text-muted">No strong flavor preferences yet.</p>
         ) : (
           <ul className="flex flex-col gap-2">
             {profile.clusters.map((c) => (
               <li key={c.cluster} className="flex flex-col gap-1">
-                <span className="text-sm">{c.cluster.replace(/_/g, '-')}</span>
-                <div aria-hidden className="h-2 rounded bg-gray-200">
-                  <div className="h-2 rounded bg-black" style={{ width: `${Math.round(c.affinity * 100)}%` }} />
+                <span className="self-start">
+                  <Chip>{c.cluster.replace(/_/g, '-')}</Chip>
+                </span>
+                <div aria-hidden className="h-2 rounded bg-surface-raised">
+                  <div className="h-2 rounded bg-accent" style={{ width: `${Math.round(c.affinity * 100)}%` }} />
                 </div>
-                <small className="text-gray-500">{c.evidence}</small>
+                <small className="text-text-muted">{c.evidence}</small>
               </li>
             ))}
           </ul>
@@ -95,12 +98,12 @@ export function ProfileView({ view }: { view: ProfileViewData }) {
       <div className="flex flex-col gap-2">
         <h3 className="font-medium">Preferred processes</h3>
         {profile.processes.length === 0 ? (
-          <p className="text-sm text-gray-600">No strong process preferences yet.</p>
+          <p className="text-sm text-text-muted">No strong process preferences yet.</p>
         ) : (
           <ul className="flex flex-col gap-1">
             {profile.processes.map((p) => (
               <li key={p.process} className="text-sm">
-                <span>{p.process}</span> <small className="text-gray-500">{p.evidence}</small>
+                <span>{p.process.replace(/_/g, '-')}</span> <small className="text-text-muted">{p.evidence}</small>
               </li>
             ))}
           </ul>
@@ -108,7 +111,7 @@ export function ProfileView({ view }: { view: ProfileViewData }) {
       </div>
 
       {view.builtAt && (
-        <p className="text-xs text-gray-500">Last built {new Date(view.builtAt).toLocaleDateString()}</p>
+        <p className="text-xs text-text-muted">Last built {new Date(view.builtAt).toLocaleDateString()}</p>
       )}
     </section>
   )

@@ -5,7 +5,7 @@ Personal espresso companion: Coffee Log + Grind Dial-In Assistant + Discovery En
 **Read first:** `docs/specs/2026-07-07-coffee-app-mvp-design.md` (design, locked decisions) and the active plan under `docs/plans/` (current build tasks). Don't relitigate decisions already locked in the spec — flag disagreement instead of silently deviating.
 
 ## Stack
-Next.js 16 (App Router) on Vercel · Supabase (Postgres + Auth) · Drizzle ORM (postgres-js) · Anthropic TypeScript SDK · Zod · @zxing/browser · Serwist (PWA) · Vitest + Testing Library.
+Next.js 16 (App Router) on Vercel · Supabase (Postgres + Auth) · Drizzle ORM (postgres-js) · Anthropic TypeScript SDK · Zod · @zxing/browser · Serwist (PWA) · Tailwind CSS v4 · Vitest + Testing Library.
 
 ## Commands
 - `npm run dev` / `npm run build` / `npm run start`
@@ -43,6 +43,7 @@ Schema for all of the above already exists after Plan 1 (Drizzle tables for `equ
 - Next 16 defaults to Turbopack, but Serwist (PWA) requires webpack — `dev`/`build` npm scripts already run with `--webpack` baked in; don't "fix" this back to plain `next dev`/`next build`.
 - Mocking `@/lib/db` in tests: route mocked table queries by reference equality (`table === roasters`), not `table._.name` — that property doesn't exist on real `drizzle-orm` v0.45.2 `pgTable` objects.
 - `src/lib/db/schema/user.ts`'s `auth.users` stub is for FK typing only. If `drizzle-kit generate` emits a `CREATE TABLE auth.users` statement, strip it from the migration before `push` — Supabase already owns that table.
+- Styling is **Tailwind v4 CSS-first** — no `tailwind.config.js`. The design tokens live in `src/app/globals.css`: colors in a plain `@theme` block (literal hex → generates `bg-*`/`text-*`/`border-*` utilities), fonts in `@theme inline` (they reference the `--font-*` runtime vars `next/font` injects on `<html>`, so they must be `inline`, not build-resolved). Palette: dark "third-wave-cafe-at-night" (`bg #1E1812`, `accent #C97C4B`); Fraunces = `font-display`, Karla = body, both via `next/font/google` in `layout.tsx`. `npm run build` fetches those fonts from Google at build time (needs network).
 
 ## Infra already provisioned
 - GitHub: `https://github.com/ccmalcom/coffee-app.git`

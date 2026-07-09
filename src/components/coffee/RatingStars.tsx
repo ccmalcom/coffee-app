@@ -19,7 +19,7 @@ export function RatingStars({
           onClick={() => onChange?.(star)}
           aria-label={`${star} star${star > 1 ? 's' : ''}`}
           className={`text-2xl ${readOnly ? 'cursor-default' : 'cursor-pointer'} ${
-            value && star <= value ? 'text-yellow-500' : 'text-gray-300'
+            value && star <= value ? 'text-accent' : 'text-surface-raised'
           }`}
         >
           ★
