@@ -112,7 +112,7 @@ export function ShotForm({
         <select
           value={grinderId}
           onChange={(e) => setGrinderId(e.target.value)}
-          className="border rounded p-2"
+          className="rounded border border-surface-raised bg-surface p-2"
         >
           {grinders.map((g) => (
             <option key={g.id} value={g.id}>
@@ -127,7 +127,7 @@ export function ShotForm({
         <select
           value={machineId}
           onChange={(e) => setMachineId(e.target.value)}
-          className="border rounded p-2"
+          className="rounded border border-surface-raised bg-surface p-2"
         >
           {machines.map((m) => (
             <option key={m.id} value={m.id}>
@@ -139,34 +139,34 @@ export function ShotForm({
 
       <label className="flex flex-col gap-1 text-sm">
         Dose (g)
-        <input value={dose} onChange={(e) => setDose(e.target.value)} inputMode="decimal" className="border rounded p-2" />
+        <input value={dose} onChange={(e) => setDose(e.target.value)} inputMode="decimal" className="rounded border border-surface-raised bg-surface p-2" />
       </label>
 
       <label className="flex flex-col gap-1 text-sm">
         Yield (g)
-        <input value={yieldG} onChange={(e) => setYieldG(e.target.value)} inputMode="decimal" className="border rounded p-2" />
+        <input value={yieldG} onChange={(e) => setYieldG(e.target.value)} inputMode="decimal" className="rounded border border-surface-raised bg-surface p-2" />
       </label>
 
       <label className="flex flex-col gap-1 text-sm">
         Time (s)
-        <input value={time} onChange={(e) => setTime(e.target.value)} inputMode="decimal" className="border rounded p-2" />
+        <input value={time} onChange={(e) => setTime(e.target.value)} inputMode="decimal" className="rounded border border-surface-raised bg-surface p-2" />
       </label>
 
       {hasMicroDial ? (
         <div className="flex gap-3">
           <label className="flex flex-col gap-1 text-sm flex-1">
             Grind (macro)
-            <input value={macro} onChange={(e) => setMacro(e.target.value)} inputMode="decimal" className="border rounded p-2" />
+            <input value={macro} onChange={(e) => setMacro(e.target.value)} inputMode="decimal" className="rounded border border-surface-raised bg-surface p-2" />
           </label>
           <label className="flex flex-col gap-1 text-sm flex-1">
             Micro adjust
-            <input value={micro} onChange={(e) => setMicro(e.target.value)} inputMode="decimal" className="border rounded p-2" />
+            <input value={micro} onChange={(e) => setMicro(e.target.value)} inputMode="decimal" className="rounded border border-surface-raised bg-surface p-2" />
           </label>
         </div>
       ) : (
         <label className="flex flex-col gap-1 text-sm">
           Grind setting
-          <input value={grindText} onChange={(e) => setGrindText(e.target.value)} className="border rounded p-2" />
+          <input value={grindText} onChange={(e) => setGrindText(e.target.value)} className="rounded border border-surface-raised bg-surface p-2" />
         </label>
       )}
 
@@ -176,8 +176,8 @@ export function ShotForm({
             type="button"
             key={tag}
             onClick={() => toggleTag(tag)}
-            className={`text-xs rounded-full px-3 py-1 border ${
-              tags.includes(tag) ? 'bg-black text-white' : 'bg-white'
+            className={`text-xs rounded-full px-3 py-1 border border-surface-raised ${
+              tags.includes(tag) ? 'bg-accent text-bg' : 'bg-surface text-text-muted'
             }`}
           >
             {tag}
@@ -187,14 +187,14 @@ export function ShotForm({
 
       <label className="flex flex-col gap-1 text-sm">
         Note (optional)
-        <textarea value={note} onChange={(e) => setNote(e.target.value)} rows={2} className="border rounded p-2" />
+        <textarea value={note} onChange={(e) => setNote(e.target.value)} rows={2} className="rounded border border-surface-raised bg-surface p-2" />
       </label>
 
       <button
         type="button"
         onClick={submit}
         disabled={isPending || !canSubmit}
-        className="bg-black text-white rounded p-2 disabled:opacity-50"
+        className="rounded bg-accent p-2 font-medium text-bg hover:bg-accent-hover disabled:opacity-50"
       >
         {isPending ? 'Saving…' : 'Save shot'}
       </button>
