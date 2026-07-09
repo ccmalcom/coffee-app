@@ -35,13 +35,13 @@ export function EquipmentForm() {
   }
 
   return (
-    <div className="flex flex-col gap-3 border rounded p-4">
+    <div className="flex flex-col gap-3 rounded border border-surface-raised p-4">
       <label className="flex flex-col gap-1 text-sm">
         Type
         <select
           value={kind}
           onChange={(e) => setKind(e.target.value as EquipmentKind)}
-          className="border rounded p-2"
+          className="rounded border border-surface-raised bg-surface p-2"
         >
           <option value="grinder">Grinder</option>
           <option value="machine">Machine</option>
@@ -53,7 +53,7 @@ export function EquipmentForm() {
         <input
           value={nickname}
           onChange={(e) => setNickname(e.target.value)}
-          className="border rounded p-2"
+          className="rounded border border-surface-raised bg-surface p-2"
         />
       </label>
 
@@ -62,7 +62,7 @@ export function EquipmentForm() {
         <input
           value={brand}
           onChange={(e) => setBrand(e.target.value)}
-          className="border rounded p-2"
+          className="rounded border border-surface-raised bg-surface p-2"
         />
       </label>
 
@@ -71,7 +71,7 @@ export function EquipmentForm() {
         <input
           value={model}
           onChange={(e) => setModel(e.target.value)}
-          className="border rounded p-2"
+          className="rounded border border-surface-raised bg-surface p-2"
         />
       </label>
 
@@ -81,6 +81,7 @@ export function EquipmentForm() {
             type="checkbox"
             checked={hasMicroDial}
             onChange={(e) => setHasMicroDial(e.target.checked)}
+            className="accent-accent"
           />
           Has a secondary/micro adjustment?
         </label>
@@ -93,7 +94,7 @@ export function EquipmentForm() {
             type="number"
             value={microSteps}
             onChange={(e) => setMicroSteps(Number(e.target.value))}
-            className="border rounded p-2"
+            className="rounded border border-surface-raised bg-surface p-2"
           />
         </label>
       )}
@@ -102,7 +103,7 @@ export function EquipmentForm() {
         type="button"
         onClick={submit}
         disabled={isPending || nickname.trim().length === 0}
-        className="bg-black text-white rounded p-2 disabled:opacity-50"
+        className="rounded bg-accent p-2 font-medium text-bg hover:bg-accent-hover disabled:opacity-50"
       >
         {isPending ? 'Adding…' : 'Add equipment'}
       </button>
