@@ -44,7 +44,7 @@ export function BarcodeScanner({
     <div className="flex flex-col items-center gap-3">
       <video
         ref={videoRef}
-        className="w-full max-w-sm rounded"
+        className="w-full max-w-sm rounded border border-surface-raised"
         muted
         playsInline
       />
@@ -52,7 +52,7 @@ export function BarcodeScanner({
         type="button"
         onClick={start}
         disabled={scanning}
-        className="bg-black text-white rounded px-4 py-2 disabled:opacity-50"
+        className="rounded bg-accent px-4 py-2 font-medium text-bg hover:bg-accent-hover disabled:opacity-50"
       >
         {scanning ? 'Scanning…' : 'Scan barcode'}
       </button>
