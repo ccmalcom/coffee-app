@@ -12,6 +12,9 @@ export function NavBar() {
       <Link href="/equipment" className="text-sm">
         Equipment
       </Link>
+      <Link href="/profile" className="text-sm">
+        Profile
+      </Link>
     </nav>
   )
 }
