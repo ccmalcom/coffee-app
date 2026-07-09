@@ -31,7 +31,10 @@ describe('generateProfileSummary', () => {
   })
 
   it('throws ProseGenerationError when the API call fails', async () => {
-    createMock.mockRejectedValue(new Error('network'))
+    // mockRejectedValue triggers a Vitest 4.1.10 unhandled-rejection false
+    // positive here; mockImplementationOnce defers promise creation to the
+    // actual call site, which the awaited catch handles in time.
+    createMock.mockImplementationOnce(() => Promise.reject(new Error('network')))
     await expect(generateProfileSummary(profile, [])).rejects.toBeInstanceOf(ProseGenerationError)
   })
 
