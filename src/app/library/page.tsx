@@ -22,22 +22,24 @@ export default async function LibraryPage({
   return (
     <main className="max-w-lg mx-auto p-4 flex flex-col gap-4">
       <div className="flex justify-between items-center">
-        <h1 className="text-xl font-semibold">Library</h1>
+        <h1 className="text-xl font-display font-semibold">Library</h1>
         <Link
           href="/coffee/add"
-          className="bg-black text-white rounded px-3 py-1 text-sm"
+          className="rounded bg-accent px-3 py-1 text-sm font-medium text-bg hover:bg-accent-hover"
         >
           + Add coffee
         </Link>
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex gap-4 border-b border-surface-raised">
         {TABS.map((t) => (
           <Link
             key={t}
             href={`/library?tab=${t}`}
-            className={`px-3 py-1 rounded text-sm capitalize ${
-              activeTab === t ? 'bg-black text-white' : 'bg-gray-200'
+            className={`-mb-px border-b-2 px-1 pb-2 text-sm capitalize ${
+              activeTab === t
+                ? 'border-accent text-text'
+                : 'border-transparent text-text-muted'
             }`}
           >
             {t}
@@ -46,7 +48,7 @@ export default async function LibraryPage({
       </div>
 
       {entries.length === 0 ? (
-        <p className="text-gray-500 text-sm">No coffees here yet.</p>
+        <p className="text-text-muted text-sm">No coffees here yet.</p>
       ) : (
         <div className="flex flex-col gap-2">
           {entries.map((entry) => (
